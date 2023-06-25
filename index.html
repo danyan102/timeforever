@@ -261,9 +261,9 @@
 <head>
 <style>
 .dropdown {
-  position: relative;
+  position: fixed;
+  top: 0;
   display: inline-block;
-  margin-top: 10px;
 }
 
 .dropdown-content {
@@ -273,25 +273,11 @@
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
-  top: 0;
+  margin-top: 10px;
 }
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
-
-.dropdown::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  border: 6px solid transparent;
-  border-left-color: #333;
-}
-
-.dropdown:hover::before {
-  border-left-color: #f1f1f1;
 }
 
 .dropdown-content a {
