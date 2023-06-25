@@ -192,4 +192,93 @@
     });
 </script>
 
-</body></html>
+</body>
+    <head>
+    <title>纪念日倒计时</title>
+    <style>
+        .countdown-container {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+           
+            justify-content: space-around;
+            align-items: center;
+        }
+        .countdown-item {
+            text-align: center;
+            border: 2px solid White;
+            padding: 10px;
+            
+            background-color: White;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 响应式字体和div尺寸 */
+        @media screen and (max-width: 768px) {
+            .countdown-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .countdown-item {
+                margin-bottom: 10px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            .countdown-item div {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>纪念日倒计时</h1>
+
+    <div class="countdown-container">
+        <div class="countdown-item">
+            <h2>纪念日1</h2>
+            <div id="countdown1"></div>
+        </div>
+        <div class="countdown-item">
+            <h2>纪念日2</h2>
+            <div id="countdown2"></div>
+        </div>
+        <div class="countdown-item">
+            <h2>纪念日3</h2>
+            <div id="countdown3"></div>
+        </div>
+    </div>
+
+    <script>
+        // 纪念日的日期
+        var anniversaryDates = [
+            new Date("2023-07-01"),
+            new Date("2023-08-15"),
+            new Date("2023-12-25")
+        ];
+
+        // 更新倒计时
+        function updateCountdown() {
+            var now = new Date();
+
+            for (var i = 0; i < anniversaryDates.length; i++) {
+                var anniversaryDate = anniversaryDates[i];
+                var countdownElement = document.getElementById("countdown" + (i + 1));
+
+                // 计算剩余时间
+                var timeDifference = anniversaryDate - now;
+                var days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                // 更新倒计时显示
+                countdownElement.innerHTML = days + "天 " + hours + "小时 " + minutes + "分钟 " + seconds + "秒";
+            }
+        }
+
+        // 每秒更新一次倒计时
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
