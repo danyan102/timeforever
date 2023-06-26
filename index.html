@@ -310,6 +310,133 @@
 </div>
 
 </body>
+    
+<head>
+    <meta charset="UTF-8">
+    <title>GitHub计数器</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;left:50%;
+     		
 
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        #count {
+            color: red;
+            font-size: 24px;
+        }
+
+        button {
+            background-color: white;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>收到 <span id="count">0</span> 次祝福</h1>
+        <button>点击祝福</button>
+    </div>
+
+    <script>
+        const repoOwner = "danyan102";
+        const repoName = "timeforever";
+        const filePath = "counter.json";
+        const accessToken = "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";
+
+        // 加载GitHub数据
+        function loadGitHubData() {
+            $.ajax({
+                url: `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: function (data) {
+                    const content = atob(data.content);
+                    const count = parseInt(content);
+                    $("#count").text(count);
+                },
+                error: function (error) {
+                    console.log("Error loading GitHub data:", error);
+                }
+            });
+        }
+
+        // 保存GitHub数据
+        function saveGitHubData(count) {
+            const content = count.toString();
+            const encodedContent = btoa(content);
+            const commitMessage = "Update count";
+            const branch = "main";
+
+            // 获取文件的当前SHA值
+            $.ajax({
+                url: `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                },
+                success: function (data) {
+                    const currentSHA = data.sha;
+
+                    // 更新文件内容
+                    $.ajax({
+                        url: `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`,
+                        method: "PUT",
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        },
+                        data: JSON.stringify({
+                            message: commitMessage,
+                            content: encodedContent,
+                            branch: branch,
+                            sha: currentSHA
+                        }),
+                        success: function () {
+                            console.log("GitHub data saved successfully");
+                        },
+                        error: function (error) {
+                            console.log("Error saving GitHub data:", error);
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log("Error getting current SHA:", error);
+                }
+            });
+        }
+
+        // 加载GitHub数据并绑定按钮点击事件
+        $(document).ready(function () {
+            loadGitHubData();
+            $("button").click(function () {
+                let count = parseInt($("#count").text());
+                count++;
+                $("#count").text(count);
+                saveGitHubData(count);
+            });
+        });
+
+        // 初始化 snhb
+        snhb.queue.push(function() {
+            snhb.start();
+        });
+    </script>
+</body>
 
 </html>
